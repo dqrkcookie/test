@@ -1,86 +1,189 @@
+<?php
+
+require_once ('../config/conn.php');
+
+$table_name = 'event_concern';
+$file_name = 'event_plan_concern.php';
+$query = $pdo->query("SELECT * FROM $table_name");
+$concerns = $query->fetchAll();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Planner</title>
-    <style>
-        body { font-family: sans-serif; margin: 0; background-color: #f4f4f4; color: #333; }
-        header { background-color: #6f42c1; color: #fff; padding: 1em 0; text-align: center; }
-        nav ul { list-style-type: none; padding: 0; text-align: center; background-color: #5a379e; }
-        nav ul li { display: inline; margin-right: 20px; }
-        nav ul li a { text-decoration: none; color: #fff; padding: 15px 20px; display: inline-block; }
-        nav ul li a:hover { background-color: #4a2d82; }
-        .container { padding: 20px; }
-        .breadcrumb { margin-bottom: 20px; }
-        .breadcrumb a { text-decoration: none; color: #007bff; }
-        .tool-section { background-color: #fff; margin-bottom: 20px; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .tool-section h2 { color: #6f42c1; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        footer { text-align: center; padding: 20px; background-color: #333; color: #fff; margin-top: 30px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Plan Concern - Customer Support</title>
+  <style>
+    body { 
+      font-family: 'Segoe UI', Arial, sans-serif; 
+      margin: 0; 
+      background-color: #f1f1f1; 
+      color: #333; 
+    }
+    header { 
+      background-color: #222; 
+      color: #fff; 
+      padding: 1.5em 0; 
+      text-align: center; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .container { 
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px; 
+    }
+    .breadcrumb { 
+      margin-bottom: 20px; 
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .breadcrumb a { 
+      text-decoration: none; 
+      color: #555; 
+      transition: color 0.3s;
+    }
+    .breadcrumb a:hover {
+      color: #000;
+    }
+    .content-area { 
+      background-color: #fff; 
+      padding: 25px; 
+      border-radius: 6px; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+    }
+    h1 {
+      margin: 0;
+      font-weight: 400;
+    }
+    h2 {
+      color: #222;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #333;
+      color: #fff;
+      font-weight: 500;
+    }
+    tr:nth-child(even) {
+      background-color: #f8f8f8;
+    }
+    tr:hover {
+      background-color: #eee;
+      transition: background-color 0.2s;
+    }
+    
+    button {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #222;
+    }
+
+    footer { 
+      text-align: center; 
+      padding: 20px; 
+      background-color: #222; 
+      color: #ccc; 
+      margin-top: 30px; 
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      .content-area {
+        padding: 15px;
+      }
+      table {
+        font-size: 14px;
+      }
+      th, td {
+        padding: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1>Event Planner</h1>
-    </header>
+<header>
+  <h1>Event Plan Concern Management</h1>
+</header>
 
-    <nav>
-        <ul>
-            <li><a href="index.php">Dashboard Home</a></li>
-            <li><a href="#create-event">Create Event</a></li>
-            <li><a href="#manage-events">Manage Events</a></li>
-            <li><a href="#guest-list">Guest List</a></li>
-            <li><a href="#venue-layout">Venue Layout</a></li>
-            <li><a href="#budget-tracker">Budget Tracker</a></li>
-        </ul>
-    </nav>
+<div class="container">
+  <div class="breadcrumb">
+    <a href="index.php">Dashboard</a> &gt; Event Plan Concern
+  </div>
 
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="index.php">Dashboard</a> &gt; Event Planner
-        </div>
+  <div class="content-area">
+    <h2>Manage Event Plan Concerns</h2>
+    <p>Review and resolve customer support inquiries regarding the overall event plan, schedules, or logistics.</p>
 
-        <div id="create-event" class="tool-section">
-            <h2>Create New Event</h2>
-            <p>Form to input details for a new event (name, date, venue, etc.).</p>
-            <form>
-                <div>
-                    <label for="eventName">Event Name:</label>
-                    <input type="text" id="eventName" name="eventName">
-                </div>
-                <div>
-                    <label for="eventDate">Event Date:</label>
-                    <input type="date" id="eventDate" name="eventDate">
-                </div>
-                <button type="submit">Create Event</button>
-            </form>
-        </div>
+    <?php if (!empty($concerns)) { ?>
+      <table>
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Event</th>
+            <th>Issue</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($concerns as $concern) { ?>
+            <tr>
+              <td><?php echo htmlspecialchars($concern->full_name); ?></td>
+              <td><?php echo htmlspecialchars($concern->email_address); ?></td>
+              <td><?php echo htmlspecialchars($concern->event_name); ?></td>
+              <td><?php echo htmlspecialchars($concern->issue); ?></td>
+              <td><?php echo nl2br(htmlspecialchars($concern->description)); ?></td>
+              <td>
+                <form action="remote/resolve.php" method="GET">
+                  <input type="hidden" name="id" value="<?php echo $concern->id; ?>">
+                  <input type="hidden" name="table_name" value="<?php echo $table_name; ?>">
+                  <input type="hidden" name="file_name" value="<?php echo $file_name; ?>">
+                  <button type="submit" name="resolve">Resolve</button>
+                </form>
+              </td>
+            </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+    <?php } else { ?>
+      <p>No event plan concerns found.</p>
+    <?php } ?>
+  </div>
+</div>
 
-        <div id="manage-events" class="tool-section">
-            <h2>Manage Existing Events</h2>
-            <p>Table or list of current and past events with options to edit or view details.</p>
-            </div>
-
-        <div id="guest-list" class="tool-section">
-            <h2>Guest List Management</h2>
-            <p>Tools for adding, importing, and managing guest lists, RSVPs, etc.</p>
-            </div>
-
-        <div id="venue-layout" class="tool-section">
-            <h2>Venue Layout & Seating</h2>
-            <p>Interface for designing venue layouts, table arrangements, and seat assignments.</p>
-            </div>
-
-        <div id="budget-tracker" class="tool-section">
-            <h2>Budget Tracker</h2>
-            <p>Tools for managing event budgets, expenses, and payments.</p>
-            </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2025 Your Company Name. All rights reserved.</p>
-    </footer>
+<footer>
+  <p>&copy; 2025 Your Company Name. All rights reserved.</p>
+</footer>
 
 </body>
 </html>
