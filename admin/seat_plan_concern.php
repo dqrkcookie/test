@@ -110,6 +110,10 @@ $concerns = $query->fetchAll();
       color: #ccc; 
       margin-top: 30px; 
     }
+
+    button{
+      margin: 3px;
+    }
     
     /* Responsive adjustments */
     @media (max-width: 768px) {
@@ -153,6 +157,7 @@ $concerns = $query->fetchAll();
             <th>Ticket ID</th>
             <th>Seat #</th>
             <th>Description</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -165,12 +170,15 @@ $concerns = $query->fetchAll();
               <td><?php echo htmlspecialchars($concern->ticket_id); ?></td>
               <td><?php echo htmlspecialchars($concern->seat_number); ?></td>
               <td><?php echo nl2br(htmlspecialchars($concern->description)); ?></td>
+              <td><?php echo htmlspecialchars($concern->status); ?></td>
               <td>
                 <form action="remote/resolve.php" method="GET">
                   <input type="hidden" name="id" value="<?php echo $concern->id; ?>">
                   <input type="hidden" name="table_name" value="<?php echo $table_name; ?>">
                   <input type="hidden" name="file_name" value="<?php echo $file_name; ?>">
-                  <button type="submit" name="resolve">Resolve</button>
+                  <input type="hidden" name="email" value="<?php echo htmlspecialchars($concern->email_address); ?>">
+                  <button type="submit" name="resolve">Resolved</button>
+                  <button type="submit" name="assist">Assist</button>
                 </form>
               </td>
             </tr>
